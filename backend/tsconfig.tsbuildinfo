@@ -1,0 +1,1 @@
+{"root":["./src/app.ts","./src/middleware/upload.ts","./src/models/eventregistration.ts","./src/models/hackathon.ts","./src/routes/hackathon.ts","./src/routes/register.ts","./src/utils/cloudinary.ts"],"version":"5.7.3"}
