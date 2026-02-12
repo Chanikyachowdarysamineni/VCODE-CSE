@@ -82,6 +82,13 @@ export default function Events() {
     setOpenDialog(true);
   };
 
+  const handleCloseDialog = (open: boolean) => {
+    setOpenDialog(open);
+    if (!open) {
+      setActiveForm(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4">
       <div className="max-w-7xl mx-auto">
@@ -110,7 +117,7 @@ export default function Events() {
 
             <div className="space-y-3 mb-6">
               {technicalEvents.map((event, idx) => (
-                <Dialog key={idx} open={openDialog && activeForm === event.formType}>
+                <Dialog key={idx} open={openDialog && activeForm === event.formType} onOpenChange={handleCloseDialog}>
                   <DialogTrigger asChild>
                     <button
                       onClick={() => handleEventClick(event.formType)}
@@ -146,7 +153,7 @@ export default function Events() {
               expressions
             </p>
 
-            <Dialog open={openDialog && activeForm === "cultural"}>
+            <Dialog open={openDialog && activeForm === "cultural"} onOpenChange={handleCloseDialog}>
               <DialogTrigger asChild>
                 <button
                   onClick={() => handleEventClick("cultural")}
@@ -184,7 +191,7 @@ export default function Events() {
               Join competitive sports leagues and tournaments
             </p>
 
-            <Dialog open={openDialog && activeForm === "sports"}>
+            <Dialog open={openDialog && activeForm === "sports"} onOpenChange={handleCloseDialog}>
               <DialogTrigger asChild>
                 <button
                   onClick={() => handleEventClick("sports")}
