@@ -6,6 +6,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { validationRules } from "@/utils/validation";
+import { SECTIONS_BY_YEAR } from "@/utils/sections";
 
 type FormDataType = {
   eventName: string;
@@ -48,6 +49,10 @@ export default function PosterForm() {
     topic: "",
     participants: {},
   });
+
+  const getSectionsForYear = (year: string) => {
+    return SECTIONS_BY_YEAR[year as keyof typeof SECTIONS_BY_YEAR] || [];
+  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -171,31 +176,6 @@ export default function PosterForm() {
     }
   };
 
-  const sectionsForYear: Record<number, string[]> = {
-    2: [
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-    ],
-    3: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
-  };
-
   return (
     <div className="shadow-input mx-auto w-full max-w-lvh rounded-none p-4 md:rounded-2xl md:p-8 dark:bg-black">
       <h2 className="text-xl font-bold text-neutral-100 dark:text-neutral-200">
@@ -257,40 +237,37 @@ export default function PosterForm() {
           )}
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="year">Year</Label>
+          <Label htmlFor="year">Year <span className="text-red-500">*</span></Label>
           <select
             id="year"
             name="year"
             value={formData.participants[0].year}
             onChange={handleChange}
             className="w-full p-2 rounded-md border bg-neutral-900 text-white"
+            required
           >
-            <option value="">Select Year</option>
-            <option value="2">2nd Year</option>
-            <option value="3">3rd Year</option>
+            <option value="">Select Year (Required: 2nd or 3rd)</option>
+            <option value="2nd">2nd Year</option>
+            <option value="3rd">3rd Year</option>
           </select>
           {errors.participants[0]?.year && (
             <p className="text-red-400 text-xs mt-1">{errors.participants[0].year}</p>
           )}
         </LabelInputContainer>
 
-        {formData.participants[0].year &&
-          sectionsForYear[
-            +formData.participants[0].year as keyof typeof sectionsForYear
-          ] && (
+        {formData.participants[0].year && getSectionsForYear(formData.participants[0].year).length > 0 && (
             <LabelInputContainer className="mb-4">
-              <Label htmlFor="section">Section</Label>
+              <Label htmlFor="section">Section <span className="text-red-500">*</span></Label>
               <select
                 id="section"
                 name="section"
                 value={formData.participants[0].section}
                 onChange={handleChange}
                 className="w-full p-2 rounded-md border bg-neutral-900 text-white"
+                required
               >
                 <option value="">Select Section</option>
-                {sectionsForYear[
-                  +formData.participants[0].year as keyof typeof sectionsForYear
-                ].map((sec) => (
+                {getSectionsForYear(formData.participants[0].year).map((sec) => (
                   <option key={sec} value={sec}>
                     {sec}
                   </option>

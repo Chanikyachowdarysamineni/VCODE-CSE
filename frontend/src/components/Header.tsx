@@ -58,12 +58,6 @@ const Header = () => {
           Teams
         </Link>
         <Link 
-          to="/hackathon" 
-          className="px-4 py-2 rounded-lg transition duration-300 bg-white/5 hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 border border-white/10 hover:border-white/30"
-        >
-          Hackathon
-        </Link>
-        <Link 
           to="/contact" 
           className="px-4 py-2 rounded-lg transition duration-300 bg-white/5 hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 border border-white/10 hover:border-white/30"
         >
@@ -116,13 +110,6 @@ const Header = () => {
             onClick={() => setMenuOpen(false)}
           >
             Teams
-          </Link>
-          <Link 
-            to="/hackathon" 
-            className="text-white px-4 py-2 rounded-lg transition duration-300 bg-white/5 hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 border border-white/10 hover:border-white/30" 
-            onClick={() => setMenuOpen(false)}
-          >
-            Hackathon
           </Link>
           <Link 
             to="/contact" 

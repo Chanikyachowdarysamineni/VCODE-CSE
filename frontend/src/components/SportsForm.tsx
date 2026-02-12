@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import { validationRules } from "@/utils/validation";
+import { SECTIONS_BY_YEAR } from "@/utils/sections";
 
 // Define the expected form data structure
 type FormDataType = {
@@ -64,6 +65,10 @@ export default function SportsForm() {
     role: "",
     phoneNo: "",
   });
+
+  const getSectionsForYear = (year: string) => {
+    return SECTIONS_BY_YEAR[year as keyof typeof SECTIONS_BY_YEAR] || [];
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -388,14 +393,38 @@ export default function SportsForm() {
                 className="w-full p-2 rounded-md border bg-neutral-900 text-white dark:border-neutral-700"
                 required
               >
-                <option value="">Select Year</option>
-                <option value="1">1st Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
+                <option value="">Select Year (Required: 2nd or 3rd)</option>
+                <option value="2nd">2nd Year</option>
+                <option value="3rd">3rd Year</option>
               </select>
               {errors.year && (
                 <p className="text-red-400 text-xs mt-1">{errors.year}</p>
+              )}
+            </LabelInputContainer>
+          )}
+
+          {/* Academic Section - Only for students */}
+          {(formData.section === "Men" || formData.section === "Women") && formData.year && getSectionsForYear(formData.year).length > 0 && (
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="academicSection">Class Section (A-Z) *</Label>
+              <select
+                id="academicSection"
+                name="academicSection"
+                value={formData.registrationNo} // reuse registrationNo to store section temporarily
+                onChange={(e) => {
+                  setFormData({ ...formData, registrationNo: e.target.value });
+                  setErrors((prev) => ({ ...prev, registrationNo: "" }));
+                }}
+                className="w-full p-2 rounded-md border bg-neutral-900 text-white dark:border-neutral-700"
+                required
+              >
+                <option value="">Select Class Section</option>
+                {getSectionsForYear(formData.year).map((sec) => (
+                  <option key={sec} value={sec}>{sec}</option>
+                ))}
+              </select>
+              {errors.registrationNo && (
+                <p className="text-red-400 text-xs mt-1">{errors.registrationNo}</p>
               )}
             </LabelInputContainer>
           )}

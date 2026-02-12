@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import { validationRules } from "@/utils/validation";
+import { SECTIONS_BY_YEAR } from "@/utils/sections";
 
 interface Participant {
   name: string;
@@ -62,6 +63,10 @@ export default function QuizForm() {
     teamName: "",
     members: {},
   });
+
+  const getSectionsForYear = (year: string) => {
+    return SECTIONS_BY_YEAR[year as keyof typeof SECTIONS_BY_YEAR] || [];
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -205,11 +210,6 @@ export default function QuizForm() {
     }
   };
 
-  const sectionsForYear: Record<number, string[]> = {
-    2: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"],
-    3: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
-  };
-
   return (
     <div className="shadow-input mx-auto w-full max-w-lvh rounded-none p-4 md:rounded-2xl md:p-8 dark:bg-black">
       <Toaster position="top-right" />
@@ -258,25 +258,27 @@ export default function QuizForm() {
                 value={member.year}
                 onChange={(e) => handleChange(e, index)}
                 className="w-full p-2 rounded-md border bg-neutral-900 text-white"
+                required
               >
-                <option value="">Select Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
+                <option value="">Select Year (Required: 2nd or 3rd)</option>
+                <option value="2nd">2nd Year</option>
+                <option value="3rd">3rd Year</option>
               </select>
             </LabelInputContainer>
 
-            {member.year && sectionsForYear[+member.year] && (
+            {member.year && getSectionsForYear(member.year).length > 0 && (
               <LabelInputContainer className="mb-4">
-                <Label htmlFor={`section-${index}`}>Section</Label>
+                <Label htmlFor={`section-${index}`}>Section <span className="text-red-500">*</span></Label>
                 <select
                   id={`section-${index}`}
                   name="section"
                   value={member.section}
                   onChange={(e) => handleChange(e, index)}
                   className="w-full p-2 rounded-md border bg-neutral-900 text-white"
+                  required
                 >
                   <option value="">Select Section</option>
-                  {sectionsForYear[+member.year].map((sec) => (
+                  {getSectionsForYear(member.year).map((sec) => (
                     <option key={sec} value={sec}>
                       {sec}
                     </option>

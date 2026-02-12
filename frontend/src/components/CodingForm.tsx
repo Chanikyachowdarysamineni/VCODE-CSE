@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import { validationRules } from "@/utils/validation";
+import { SECTIONS_BY_YEAR } from "@/utils/sections";
 
 // Define the expected form data structure
 type FormDataType = {
@@ -109,9 +110,8 @@ export default function CodingForm() {
     }
   };
 
-  const sectionsForYear: Record<string, string[]> = {
-    2: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S"],
-    3: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+  const getSectionsForYear = (year: string) => {
+    return SECTIONS_BY_YEAR[year as keyof typeof SECTIONS_BY_YEAR] || [];
   };
 
   return (
@@ -138,9 +138,9 @@ export default function CodingForm() {
                       errors[key] ? "border-red-500" : ""
                     )}
                   >
-                    <option value="">Select Year</option>
-                    <option value="2">2nd Year</option>
-                    <option value="3">3rd Year</option>
+                    <option value="">Select Year (Required: 2nd or 3rd)</option>
+                    <option value="2nd">2nd Year</option>
+                    <option value="3rd">3rd Year</option>
                   </select>
                   {errors[key] && <p className="text-red-400 text-xs mt-1">{errors[key]}</p>}
                 </div>
@@ -162,9 +162,9 @@ export default function CodingForm() {
           )
         ))}
 
-        {formData.year && sectionsForYear[formData.year] && (
+        {formData.year && getSectionsForYear(formData.year).length > 0 && (
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="section">Section</Label>
+            <Label htmlFor="section">Section <span className="text-red-500">*</span></Label>
             <div>
               <select
                 id="section"
@@ -175,9 +175,10 @@ export default function CodingForm() {
                   "w-full p-2 rounded-md border bg-neutral-900 text-white dark:border-neutral-700",
                   errors.section ? "border-red-500" : ""
                 )}
+                required
               >
                 <option value="">Select Section</option>
-                {sectionsForYear[formData.year].map((sec) => (
+                {getSectionsForYear(formData.year).map((sec) => (
                   <option key={sec} value={sec}>{sec}</option>
                 ))}
               </select>

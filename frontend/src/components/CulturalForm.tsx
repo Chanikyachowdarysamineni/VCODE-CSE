@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import { validationRules } from "@/utils/validation";
+import { SECTIONS_BY_YEAR } from "@/utils/sections";
 
 type FormDataType = {
   name: string;
@@ -29,6 +30,10 @@ export default function CulturalForm() {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const getSectionsForYear = (year: string) => {
+    return SECTIONS_BY_YEAR[year as keyof typeof SECTIONS_BY_YEAR] || [];
+  };
 
   const culturalEvents = [
     "Dance",
@@ -299,17 +304,44 @@ export default function CulturalForm() {
                 "w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:outline-none transition",
                 errors.year ? "border-red-500" : ""
               )}
+              required
             >
-              <option value="">Select year</option>
-              <option value="1st">1st Year</option>
+              <option value="">Select Year (Required: 2nd or 3rd)</option>
               <option value="2nd">2nd Year</option>
               <option value="3rd">3rd Year</option>
-              <option value="4th">4th Year</option>
             </select>
             {errors.year && (
               <p className="text-red-500 text-sm mt-1">{errors.year}</p>
             )}
           </div>
+
+          {/* Section */}
+          {formData.year && getSectionsForYear(formData.year).length > 0 && (
+            <div>
+              <Label htmlFor="section" className="text-white mb-2 block">
+                Section <span className="text-red-500">*</span>
+              </Label>
+              <select
+                id="section"
+                name="section"
+                value={formData.section}
+                onChange={handleChange}
+                className={cn(
+                  "w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:outline-none transition",
+                  errors.section ? "border-red-500" : ""
+                )}
+                required
+              >
+                <option value="">Select Section</option>
+                {getSectionsForYear(formData.year).map((sec) => (
+                  <option key={sec} value={sec}>{sec}</option>
+                ))}
+              </select>
+              {errors.section && (
+                <p className="text-red-500 text-sm mt-1">{errors.section}</p>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Submit Button */}

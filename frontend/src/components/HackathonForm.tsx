@@ -5,6 +5,7 @@ import { Loader2, UserPlus, UserMinus, Github, Globe, Upload, X } from "lucide-r
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { validationRules } from "@/utils/validation";
+import { SECTIONS_BY_YEAR } from "@/utils/sections";
 
 const HackathonForm = () => {
   interface FormErrors {
@@ -38,6 +39,10 @@ const HackathonForm = () => {
 
   const navigate = useNavigate();
 
+  const getSectionsForYear = (year: string) => {
+    return SECTIONS_BY_YEAR[year as keyof typeof SECTIONS_BY_YEAR] || [];
+  };
+
   const problemStatements = [
     "Smart Digital Election & Feedback Platform for Campus Organizations",
     "Student coding Profile Tracker",
@@ -58,11 +63,67 @@ const HackathonForm = () => {
       registrationNo: "",
       phoneNo: "",
       section: "",
-      year: "",
+      year: "3rd",
+      img: null,
+      imgPreview: "",
+    },
+    {
+      name: "",
+      email: "",
+      registrationNo: "",
+      phoneNo: "",
+      section: "",
+      year: "3rd",
+      img: null,
+      imgPreview: "",
+    },
+    {
+      name: "",
+      email: "",
+      registrationNo: "",
+      phoneNo: "",
+      section: "",
+      year: "3rd",
+      img: null,
+      imgPreview: "",
+    },
+    {
+      name: "",
+      email: "",
+      registrationNo: "",
+      phoneNo: "",
+      section: "",
+      year: "2nd",
+      img: null,
+      imgPreview: "",
+    },
+    {
+      name: "",
+      email: "",
+      registrationNo: "",
+      phoneNo: "",
+      section: "",
+      year: "2nd",
       img: null,
       imgPreview: "",
     },
   ]);
+
+  // Check team composition
+  const checkTeamComposition = () => {
+    const thirdYearCount = participants.filter(p => p.year === "3rd" && p.name.trim()).length;
+    const secondYearCount = participants.filter(p => p.year === "2nd" && p.name.trim()).length;
+    const totalMembers = participants.filter(p => p.name.trim()).length;
+    
+    return {
+      thirdYearCount,
+      secondYearCount,
+      totalMembers,
+      isValid: thirdYearCount === 3 && secondYearCount === 2 && totalMembers === 5
+    };
+  };
+
+  const teamComposition = checkTeamComposition();
 
   const handleParticipantChange = (index: number, field: string, value: any) => {
     const updated = [...participants];
@@ -96,12 +157,12 @@ const HackathonForm = () => {
 
   const addParticipant = () => {
     if (participants.length < 6) {
-      setParticipants([...participants, { name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "", img: null, imgPreview: "" }]);
+      setParticipants([...participants, { name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "3rd", img: null, imgPreview: "" }]);
     }
   };
 
   const removeParticipant = (index: number) => {
-    if (participants.length > 4) {
+    if (participants.length > 5) {
       if (participants[index].imgPreview) {
         URL.revokeObjectURL(participants[index].imgPreview);
       }
@@ -133,9 +194,23 @@ const HackathonForm = () => {
       newErrors.problemStatement = "Problem statement is required";
     }
 
+    // Validate team composition (3rd year: 3, 2nd year: 2)
+    const { thirdYearCount, secondYearCount, totalMembers, isValid } = checkTeamComposition();
+    if (!isValid) {
+      if (totalMembers !== 5) {
+        newErrors.participants[0] = { ...newErrors.participants[0], teamSize: `Team must have exactly 5 members. Current: ${totalMembers}` };
+      }
+      if (thirdYearCount !== 3) {
+        newErrors.participants[0] = { ...newErrors.participants[0], thirdYear: `Need exactly 3 third-year students. Current: ${thirdYearCount}` };
+      }
+      if (secondYearCount !== 2) {
+        newErrors.participants[0] = { ...newErrors.participants[0], secondYear: `Need exactly 2 second-year students. Current: ${secondYearCount}` };
+      }
+    }
+
     // Validate participants
     participants.forEach((participant, index) => {
-      newErrors.participants[index] = {};
+      newErrors.participants[index] = newErrors.participants[index] || {};
 
       const nameValidation = validationRules.validateName(participant.name);
       if (!nameValidation.valid) newErrors.participants[index].name = nameValidation.error;
@@ -153,8 +228,9 @@ const HackathonForm = () => {
         newErrors.participants[index].section = "Section is required";
       }
 
-      const yearValidation = validationRules.validateYear(participant.year);
-      if (!yearValidation.valid) newErrors.participants[index].year = yearValidation.error;
+      if (!participant.year) {
+        newErrors.participants[index].year = "Year is required";
+      }
     });
 
     // Validate optional GitHub link
@@ -223,7 +299,13 @@ const HackathonForm = () => {
       setBackend(0);
       setFrontend(0);
       setDeployed(0);
-      setParticipants([{ name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "", img: null, imgPreview: "" }]);
+      setParticipants([
+        { name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "3rd", img: null, imgPreview: "" },
+        { name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "3rd", img: null, imgPreview: "" },
+        { name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "3rd", img: null, imgPreview: "" },
+        { name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "2nd", img: null, imgPreview: "" },
+        { name: "", email: "", registrationNo: "", phoneNo: "", section: "", year: "2nd", img: null, imgPreview: "" },
+      ]);
       toast.success("Team submitted successfully! 🎉");
       navigate("/team");
 
@@ -300,11 +382,53 @@ const HackathonForm = () => {
           )}
         </div>
 
-          <div className="bg-gray-800/30 p-4 sm:p-6 rounded-xl">
+          <div className="bg-gray-800/30 p-4 sm:p-6 rounded-xl border-2 border-blue-500">
             <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
               <UserPlus size={20} />
-              Participants (Min 4, Max 6)
+              Team Composition (Required)
             </h2>
+            
+            {/* Team Composition Requirement */}
+            <div className="mb-6 p-4 bg-blue-900/30 border border-blue-500/50 rounded-lg">
+              <p className="text-blue-200 font-semibold mb-3">Required Team Composition:</p>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className={`p-3 rounded-lg ${
+                  teamComposition.thirdYearCount === 3
+                    ? "bg-green-900/30 border border-green-500/50"
+                    : "bg-red-900/30 border border-red-500/50"
+                }`}>
+                  <p className={teamComposition.thirdYearCount === 3 ? "text-green-300" : "text-red-300"}>
+                    3rd Year: {teamComposition.thirdYearCount}/3
+                  </p>
+                </div>
+                <div className={`p-3 rounded-lg ${
+                  teamComposition.secondYearCount === 2
+                    ? "bg-green-900/30 border border-green-500/50"
+                    : "bg-red-900/30 border border-red-500/50"
+                }`}>
+                  <p className={teamComposition.secondYearCount === 2 ? "text-green-300" : "text-red-300"}>
+                    2nd Year: {teamComposition.secondYearCount}/2
+                  </p>
+                </div>
+                <div className={`p-3 rounded-lg col-span-2 ${
+                  teamComposition.totalMembers === 5
+                    ? "bg-green-900/30 border border-green-500/50"
+                    : "bg-red-900/30 border border-red-500/50"
+                }`}>
+                  <p className={teamComposition.totalMembers === 5 ? "text-green-300" : "text-red-300"}>
+                    Total Members: {teamComposition.totalMembers}/5
+                  </p>
+                </div>
+              </div>
+              {teamComposition.isValid && (
+                <p className="mt-3 text-green-300 font-semibold flex items-center gap-2">
+                  ✓ Team composition is valid!
+                </p>
+              )}
+              {!teamComposition.isValid && (
+                <p className="mt-3 text-red-300 text-sm">Please adjust your team to match the required composition.</p>
+              )}
+            </div>
             {participants.map((participant, index) => (
               <div key={index} className="mb-4 bg-gray-800/50 p-4 rounded-lg border border-gray-700">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -361,27 +485,32 @@ const HackathonForm = () => {
                     )}
                   </div>
                   <div>
-                    <input
-                      type="text"
-                      placeholder="Section"
+                    <select
                       required
                       value={participant.section}
                       onChange={(e) => handleParticipantChange(index, "section", e.target.value)}
-                      className="w-full bg-gray-700/50 p-2 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all outline-none"
-                    />
+                      className="w-full bg-gray-700/50 p-2 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all outline-none text-white"
+                    >
+                      <option value="">Select Section</option>
+                      {getSectionsForYear(participant.year).map((section) => (
+                        <option key={section} value={section}>{section}</option>
+                      ))}
+                    </select>
                     {errors.participants[index]?.section && (
                       <p className="text-red-400 text-xs mt-1">{errors.participants[index].section}</p>
                     )}
                   </div>
                   <div>
-                    <input
-                      type="number"
-                      placeholder="Year"
+                    <select
                       required
                       value={participant.year}
                       onChange={(e) => handleParticipantChange(index, "year", e.target.value)}
-                      className="w-full bg-gray-700/50 p-2 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all outline-none"
-                    />
+                      className="w-full bg-gray-700/50 p-2 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all outline-none text-white"
+                    >
+                      <option value="">Select Year</option>
+                      <option value="2nd">2nd Year</option>
+                      <option value="3rd">3rd Year</option>
+                    </select>
                     {errors.participants[index]?.year && (
                       <p className="text-red-400 text-xs mt-1">{errors.participants[index].year}</p>
                     )}
@@ -422,7 +551,7 @@ const HackathonForm = () => {
                     )}
                   </div>
                 </div>
-                {participants.length > 4 && (
+                {participants.length > 5 && (
                   <button
                     type="button"
                     onClick={() => removeParticipant(index)}
@@ -518,14 +647,20 @@ const HackathonForm = () => {
 
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-500 hover:via-purple-500 hover:to-pink-500 px-6 py-3 rounded-lg text-white font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isSubmitting || !teamComposition.isValid}
+            className={`w-full px-6 py-3 rounded-lg text-white font-semibold flex items-center justify-center gap-2 transition-all ${
+              teamComposition.isValid
+                ? "bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-500 hover:via-purple-500 hover:to-pink-500"
+                : "bg-gray-600 cursor-not-allowed"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="animate-spin" size={20} />
                 Submitting...
               </>
+            ) : !teamComposition.isValid ? (
+              "Complete Team Composition to Submit"
             ) : (
               "Submit Team"
             )}
