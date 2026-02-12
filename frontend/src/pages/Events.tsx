@@ -97,13 +97,13 @@ export default function Events() {
 
         {/* Main Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Technical Card */}
-          <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-lg p-8 border border-blue-700 hover:border-blue-500 transition">
+          {/* Technical Card - Glassomorphism */}
+          <div className="relative backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 hover:border-white/30 transition-all hover:bg-white/15 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
-              <Code2 className="w-8 h-8 text-blue-400" />
+              <Code2 className="w-8 h-8 text-blue-300" />
               <h2 className="text-2xl font-bold text-white">Technical</h2>
             </div>
-            <p className="text-gray-300 mb-6">
+            <p className="text-gray-200 mb-6">
               Showcase your technical skills in coding challenges, hackathons,
               and more
             </p>
@@ -114,7 +114,7 @@ export default function Events() {
                   <DialogTrigger asChild>
                     <button
                       onClick={() => handleEventClick(event.formType)}
-                      className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg transition flex items-center justify-between group"
+                      className="w-full backdrop-blur-md bg-blue-500/30 hover:bg-blue-500/50 text-white py-2 px-4 rounded-xl transition flex items-center justify-between group border border-blue-400/30 hover:border-blue-400/60"
                     >
                       <span className="text-sm">{event.title}</span>
                       <span className="text-xs opacity-0 group-hover:opacity-100 transition">
@@ -122,7 +122,7 @@ export default function Events() {
                       </span>
                     </button>
                   </DialogTrigger>
-                  <DialogContent className="max-h-[90vh] overflow-y-auto bg-slate-900 border-gray-700">
+                  <DialogContent className="max-h-[90vh] overflow-y-auto backdrop-blur-xl bg-slate-900/95 border-white/20">
                     <DialogHeader>
                       <DialogTitle className="text-white text-2xl">
                         {event.title} Registration
@@ -135,13 +135,13 @@ export default function Events() {
             </div>
           </div>
 
-          {/* Cultural Card */}
-          <div className="bg-gradient-to-br from-pink-900 to-pink-800 rounded-lg p-8 border border-pink-700 hover:border-pink-500 transition">
+          {/* Cultural Card - Glassomorphism */}
+          <div className="relative backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 hover:border-white/30 transition-all hover:bg-white/15 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
-              <Music className="w-8 h-8 text-pink-400" />
+              <Music className="w-8 h-8 text-pink-300" />
               <h2 className="text-2xl font-bold text-white">Cultural</h2>
             </div>
-            <p className="text-gray-300 mb-6">
+            <p className="text-gray-200 mb-6">
               Celebrate diversity through dance, music, art, and creative
               expressions
             </p>
@@ -150,12 +150,12 @@ export default function Events() {
               <DialogTrigger asChild>
                 <button
                   onClick={() => handleEventClick("cultural")}
-                  className="w-full bg-pink-600 hover:bg-pink-500 text-white py-3 px-4 rounded-lg transition font-medium"
+                  className="w-full backdrop-blur-md bg-pink-500/30 hover:bg-pink-500/50 text-white py-3 px-4 rounded-xl transition font-medium border border-pink-400/30 hover:border-pink-400/60"
                 >
                   Register for Cultural Events
                 </button>
               </DialogTrigger>
-              <DialogContent className="max-h-[90vh] overflow-y-auto bg-slate-900 border-gray-700">
+              <DialogContent className="max-h-[90vh] overflow-y-auto backdrop-blur-xl bg-slate-900/95 border-white/20">
                 <DialogHeader>
                   <DialogTitle className="text-white text-2xl">
                     Cultural Events Registration
@@ -165,8 +165,8 @@ export default function Events() {
               </DialogContent>
             </Dialog>
 
-            <div className="mt-6 p-4 bg-pink-900/50 rounded-lg border border-pink-700/50">
-              <p className="text-pink-200 text-sm">
+            <div className="mt-6 p-4 backdrop-blur-md bg-pink-500/20 rounded-xl border border-pink-400/30">
+              <p className="text-pink-100 text-sm">
                 <strong>Available Events:</strong> Dance, Music, Drama, Art &
                 Painting, Photography, Fashion Show, Debate, Poetry, Story
                 Telling
@@ -174,13 +174,13 @@ export default function Events() {
             </div>
           </div>
 
-          {/* Sports Card */}
-          <div className="bg-gradient-to-br from-orange-900 to-orange-800 rounded-lg p-8 border border-orange-700 hover:border-orange-500 transition">
+          {/* Sports Card - Glassomorphism */}
+          <div className="relative backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 hover:border-white/30 transition-all hover:bg-white/15 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
-              <Trophy className="w-8 h-8 text-orange-400" />
+              <Trophy className="w-8 h-8 text-orange-300" />
               <h2 className="text-2xl font-bold text-white">Sports</h2>
             </div>
-            <p className="text-gray-300 mb-6">
+            <p className="text-gray-200 mb-6">
               Join competitive sports leagues and tournaments
             </p>
 
@@ -188,12 +188,12 @@ export default function Events() {
               <DialogTrigger asChild>
                 <button
                   onClick={() => handleEventClick("sports")}
-                  className="w-full bg-orange-600 hover:bg-orange-500 text-white py-3 px-4 rounded-lg transition font-medium"
+                  className="w-full backdrop-blur-md bg-orange-500/30 hover:bg-orange-500/50 text-white py-3 px-4 rounded-xl transition font-medium border border-orange-400/30 hover:border-orange-400/60"
                 >
                   Register for Sports
                 </button>
               </DialogTrigger>
-              <DialogContent className="max-h-[90vh] overflow-y-auto bg-slate-900 border-gray-700">
+              <DialogContent className="max-h-[90vh] overflow-y-auto backdrop-blur-xl bg-slate-900/95 border-white/20">
                 <DialogHeader>
                   <DialogTitle className="text-white text-2xl">
                     Sports Registration
