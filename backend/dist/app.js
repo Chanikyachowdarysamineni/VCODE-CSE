@@ -16,6 +16,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const express_1 = __importDefault(require("express"));
 const register_1 = __importDefault(require("./routes/register"));
 const hackathon_1 = __importDefault(require("./routes/hackathon"));
+const cultural_1 = __importDefault(require("./routes/cultural"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -51,6 +52,7 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 app.use("/api/hackathon", hackathon_1.default);
+app.use("/api/cultural", cultural_1.default);
 app.use('/api/register', register_1.default);
 app.use('/*', (req, res) => {
     res.status(404).send('404 Not Found1');

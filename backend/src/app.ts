@@ -3,6 +3,7 @@ import express from "express";
 import registerRoute from "./routes/register";
 import EventRegistration from "./models/EventRegistration";
 import HackathonRoute from "./routes/hackathon";
+import CulturalRoute from "./routes/cultural";
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -47,7 +48,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/hackathon", HackathonRoute);
-
+app.use("/api/cultural", CulturalRoute);
 
 app.use('/api/register', registerRoute);
 

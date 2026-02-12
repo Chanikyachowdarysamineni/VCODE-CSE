@@ -31,7 +31,7 @@ const testEndpoints = async () => {
     for (const event of events) {
       try {
         const count = await event.model.countDocuments();
-        const sample = await event.model.findOne();
+        const sample = await (event.model as any).findOne();
         results[event.name] = {
           count,
           hasSampleData: !!sample,
