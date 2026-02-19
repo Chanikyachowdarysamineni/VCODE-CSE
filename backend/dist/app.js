@@ -22,14 +22,25 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 8000;
+// Configure CORS origins - add frontend URL from environment variable
 const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:3000",
-    "https://vcode-m6ni.onrender.com",
     "http://localhost:8000",
-];
+    process.env.FRONTEND_URL, // Add your Render frontend URL here
+].filter(Boolean); // Remove undefined values
 app.use((0, cors_1.default)({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin)
+            return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ interface Team {
   status?: string;
 }
 
-const TeamListPage = ({ setUser }: { setUser: (team: Team) => void }) => {
+const TeamListPage = ({ setUser }: { setUser: Dispatch<SetStateAction<Team | null>> }) => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
   const [page, setPage] = useState(1);

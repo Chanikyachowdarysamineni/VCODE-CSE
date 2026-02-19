@@ -22,11 +22,13 @@ const HackathonBoard = lazy(() => import("./components/HackathonBoard"));
 
 interface Team {
   _id: string;
-  teamNo: number;
+  teamNo?: number;
   teamName: string;
-  problemStatement: string;
-  gitHubLink: string;
-  deploedLink: string;
+  problemStatement?: string;
+  topic?: string;
+  gitHubLink?: string;
+  deploedLink?: string;
+  eventName: string;
   participants: {
     name: string;
     registrationNo: string;
@@ -34,8 +36,7 @@ interface Team {
     section: string;
     img?: string;
   }[];
-  status:string;
-
+  status?: string;
 }
 function App() {
   const [user, setUser] = useState<Team | null>(null);
